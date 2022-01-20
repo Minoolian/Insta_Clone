@@ -3,6 +3,7 @@ package com.example.clonecode.web.controller;
 import com.example.clonecode.service.UserService;
 import com.example.clonecode.web.dto.UserLoginDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class AccountController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping("/signup")
     public String signup(UserLoginDto userLoginDto) {

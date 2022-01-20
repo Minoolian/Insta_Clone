@@ -2,6 +2,7 @@ package com.example.clonecode.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,7 +14,7 @@ import java.util.Collection;
 
 @Entity
 @Data
-@Builder
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -61,5 +62,16 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Builder
+    public User(String email, String password, String phone, String name, String title, String website, String profileImgUrl) {
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.name = name;
+        this.title = title;
+        this.website = website;
+        this.profileImgUrl = profileImgUrl;
     }
 }
