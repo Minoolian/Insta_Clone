@@ -1,52 +1,78 @@
 package com.example.clonecode.web.controller;
 
+import com.example.clonecode.domain.User;
+import com.example.clonecode.domain.UserRepository;
 import com.example.clonecode.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@WebMvcTest(AccountController.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 class AccountControllerTest {
 
     @Autowired
-    MockMvc mvc;
+    private UserRepository userRepository;
 
-    @MockBean
+    @Autowired
     private UserService userService;
 
-    @Test
-    public void signup_success() throws Exception{
-        //given
-        given(userService.save(any())).willReturn(true);
+    @Autowired
+    private WebApplicationContext context;
 
-        //when then
-        mvc.perform(post("/signup")
-                .param("email","test@test")
-                .param("password","2321123")
-                .param("phone","01010101010")
-                .param("name","minoo"))
-                .andExpect(status().isOk())
-                .andDo(print());
+    private MockMvc mvc;
 
+    private User newUser;
+    private String username = "test@test";
+    private String password = "12345";
+
+    @BeforeEach
+    public void setup(){
+        mvc= MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        newUser = User.builder()
+                .email(username)
+                .password(encoder.encode(password))
+                .phone("")
+                .name("")
+                .title(null)
+                .profileImgUrl(null)
+                .website(null)
+                .build();
     }
 
 
+    @Test
+    @Transactional
+    public void login_success() throws Exception{
+        //given
+        userRepository.save(newUser);
 
-
-
+        //when then
+        mvc.perform(formLogin("/loginForm").user(username).password(password))
+                .andDo(print())
+                .andExpect(redirectedUrl("/user/story"));
+    }
 
 }

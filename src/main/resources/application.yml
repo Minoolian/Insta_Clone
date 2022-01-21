@@ -2,20 +2,15 @@ spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     password: test
-    url: "jdbc:mariadb://15.165.248.169:3306/test"
+    url: "jdbc:mariadb://15.165.248.169:3306/test?characterEncoding=UTF-8&serverTimezone=UTC"
     username: test
-  hikari:
-    data-source-properties:
-      cachePrepStmts: true
-      prepStmtCacheSize: 250
-      prepStmtCacheSqlLimit: 2048
-      useServerPrepStmts: true
-    maximum-pool-size: 10
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect
-        format-sql: true
-        show-sql: true
-        use-sql-comment: true
-  profiles: spring
+    hibernate:
+      dialect: org.hibernate.dialect.MariaDBDialect
+      format-sql: true
+      show-sql: true
+      use-sql-comment: true
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
+    generate-ddl: true
