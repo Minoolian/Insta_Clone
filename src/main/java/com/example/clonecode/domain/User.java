@@ -3,17 +3,17 @@ package com.example.clonecode.domain;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import java.util.Collection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 @Data
 @NoArgsConstructor
 //@Table(name="user")
-public class User implements UserDetails {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class User implements UserDetails {
     private String website;
     private String profileImgUrl;
 
-    @Override
+   /* @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
@@ -60,7 +60,7 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
+    }*/
 
     @Builder
     public User(String email, String password, String phone, String name, String title, String website, String profileImgUrl) {
@@ -71,5 +71,14 @@ public class User implements UserDetails {
         this.title = title;
         this.website = website;
         this.profileImgUrl = profileImgUrl;
+    }
+
+    public void update(String password, String phone, String name, String title, String website, String profileImgUrl) {
+        this.password=password;
+        this.phone=phone;
+        this.name=name;
+        this.title=title;
+        this.website=website;
+        this.profileImgUrl=profileImgUrl;
     }
 }

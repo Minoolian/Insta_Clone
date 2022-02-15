@@ -18,7 +18,7 @@ public class IndexController {
         return "login";
     }
 
-    @GetMapping({"/", "post/story"})
+    @GetMapping({"/", "/post/story"})
     public String story(){
         return "post/story";
     }
