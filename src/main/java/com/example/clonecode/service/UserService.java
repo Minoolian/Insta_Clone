@@ -1,9 +1,11 @@
 package com.example.clonecode.service;
 
+import com.example.clonecode.domain.FollowRepository;
 import com.example.clonecode.domain.User;
 import com.example.clonecode.domain.UserRepository;
 import com.example.clonecode.web.dto.UserDto;
 import com.example.clonecode.web.dto.UserLoginDto;
+import com.example.clonecode.web.dto.UserProfileDto;
 import com.example.clonecode.web.dto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +21,7 @@ import javax.transaction.Transactional;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -70,5 +73,27 @@ public class UserService implements UserDetailsService {
                 .profileImgUrl(user.getProfileImgUrl())
                 .website(user.getWebsite())
                 .build();
+    }
+
+    @Transactional
+    public UserProfileDto getUserProfileDto(Long profileId, Long sessionId){
+
+        UserProfileDto userProfileDto = new UserProfileDto();
+
+        User user = userRepository.findUserById(profileId);
+        userProfileDto.setUser(user);
+        userProfileDto.setPostCount(0);
+
+        User loginUser = userRepository.findUserById(sessionId);
+        userProfileDto.setLoginUser(loginUser.getId() == user.getId());
+
+        userProfileDto.setFollow(false);
+
+        userProfileDto.setUserFollowerCount(0);
+        userProfileDto.setUserFollowingCount(0);
+
+        return userProfileDto;
+
+
     }
 }

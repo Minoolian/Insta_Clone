@@ -47,25 +47,25 @@
         </div>
     </section>
     <!--게시물컨섹션-->
-    <section id="tab-content">
-        <!--게시물컨컨테이너-->
+<!--    <section id="tab-content">
+        &lt;!&ndash;게시물컨컨테이너&ndash;&gt;
         <div class="profileContainer">
-            <!--그냥 감싸는 div (지우면이미지커짐)-->
+            &lt;!&ndash;그냥 감싸는 div (지우면이미지커짐)&ndash;&gt;
             <div id="tab-1-content" class="tab-content-item show">
-                <!--게시물컨 그리드배열-->
+                &lt;!&ndash;게시물컨 그리드배열&ndash;&gt;
                 <div class="tab-1-content-inner" id="img-box" >
-                    <!--아이템들-->
+                    &lt;!&ndash;아이템들&ndash;&gt;
                     <div class="img-box" th:each="post : ${userProfileDto.user.postList}" th:onclick="|postPopup(${post.id}, '.modal-post')|">
                         <img th:src="@{${'/upload/' + post.postImgUrl}}" />
                         <div class="comment">
                             <a> <i class="fas fa-heart"></i><span th:text="${post.likesCount}"></span></a>
                         </div>
                     </div>
-                    <!--아이템들end-->
+                    &lt;!&ndash;아이템들end&ndash;&gt;
                 </div>
             </div>
         </div>
-    </section>
+    </section>-->
 
     <!--로그아웃, 회원정보변경 모달-->
     <div class="modal-info">
