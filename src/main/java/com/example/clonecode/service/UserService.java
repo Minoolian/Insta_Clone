@@ -87,10 +87,10 @@ public class UserService implements UserDetailsService {
         User loginUser = userRepository.findUserById(sessionId);
         userProfileDto.setLoginUser(loginUser.getId() == user.getId());
 
-        userProfileDto.setFollow(false);
+        userProfileDto.setFollow(followRepository.findFollowByFromUserAndToUser(loginUser, user) != null);
 
-        userProfileDto.setUserFollowerCount(0);
-        userProfileDto.setUserFollowingCount(0);
+        userProfileDto.setUserFollowerCount(followRepository.findFollowerCountById(user.getId()));
+        userProfileDto.setUserFollowingCount(followRepository.findFollowingCountById(loginUser.getId()));
 
         return userProfileDto;
 

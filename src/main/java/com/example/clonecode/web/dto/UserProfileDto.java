@@ -11,10 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UserProfileDto {
+
     private boolean loginUser;
     private boolean follow;
     private User user;
     private int postCount;
     private int userFollowerCount;
     private int userFollowingCount;
+
 }

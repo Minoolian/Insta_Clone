@@ -26,7 +26,7 @@ function followerInfoModalOpen(profileId) {
     $(".modal-follower").css("display", "flex");
 
     $.ajax({
-        url: `/api/user/${profileId}/follower`,
+        url: `/api/follow/${profileId}/follower`,
         dataType: "json"
     }).done(res => {
         res.forEach((follow) => {
@@ -41,7 +41,7 @@ function followingInfoModalOpen(profileId) {
     $(".modal-following").css("display", "flex");
 
     $.ajax({
-        url: `/api/user/${profileId}/following`,
+        url: `/api/follow/${profileId}/following`,
         dataType: "json"
     }).done(res => {
         res.forEach((follow) => {
