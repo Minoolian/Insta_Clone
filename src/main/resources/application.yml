@@ -14,3 +14,12 @@ spring:
     open-in-view: false
     show-sql: true
     generate-ddl: true
+
+  # multipart 설정
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: "2MB"
+
+profileImg:
+  path: "C:/testtemp/"

@@ -8,13 +8,19 @@ import com.example.clonecode.web.dto.UserLoginDto;
 import com.example.clonecode.web.dto.UserProfileDto;
 import com.example.clonecode.web.dto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -48,17 +54,37 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    @Value("${profileImg.path}")
+    private String uploadFolder;
+
     @Transactional
-    public void update(UserUpdateDto userUpdateDto) {
+    public void update(UserUpdateDto userUpdateDto, MultipartFile multipartFile) {
         User user = userRepository.findUserById(userUpdateDto.getId());
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
+
+        String imageFileName = user.getId() + "_" + multipartFile.getOriginalFilename();
+        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
+
+        if(multipartFile.getSize() != 0){
+            try{
+                if(user.getProfileImgUrl() != null){
+                    File file = new File(uploadFolder + user.getProfileImgUrl());
+                    file.delete();
+                }
+                Files.write(imageFilePath, multipartFile.getBytes());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            user.setProfileImgUrl(imageFileName);
+        }
+
         user.update(
                 encoder.encode(userUpdateDto.getPassword()),
                 userUpdateDto.getPhone(),
                 userUpdateDto.getName(),
                 userUpdateDto.getTitle(),
-                userUpdateDto.getWebsite(),
-                userUpdateDto.getProfileImgUrl()
+                userUpdateDto.getWebsite()
         );
     }
 
