@@ -20,6 +20,7 @@
 
         <!--사진업로드 Form-->
         <form class="upload-form" action="/post" method="post" enctype="multipart/form-data">
+            <!-- 임시로 추가-->
             <input  type="file" name="uploadImgUrl" id="uploadImgUrl" th:onchange="|imageChoose(this)|"/>
             <div class="upload-img">
                 <img src="/img/default_profile.jpg" alt="" id="imageUploadPreview" />

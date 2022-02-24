@@ -101,6 +101,10 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    public Long getUserIdByEmail(String email) {
+        return userRepository.findUserByEmail(email).getId();
+    }
+
     @Transactional
     public UserProfileDto getUserProfileDto(Long profileId, Long sessionId){
 

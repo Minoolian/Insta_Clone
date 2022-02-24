@@ -12,6 +12,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${profileImg.path}")
     private String profileUploadFolder;
 
+    @Value("${post.path}")
+    private String postUploadFolder;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         WebMvcConfigurer.super.addResourceHandlers(registry);
@@ -20,6 +23,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceHandler("/profile_imgs/**")
                 .addResourceLocations("file:///"+ profileUploadFolder)
                 .setCachePeriod(60*10*6)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
+
+        registry
+                .addResourceHandler("/upload/**")
+                .addResourceLocations("file:///" + postUploadFolder)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
     }

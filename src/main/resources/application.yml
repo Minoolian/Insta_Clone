@@ -23,3 +23,6 @@ spring:
 
 profileImg:
   path: "C:/testtemp/"
+
+post:
+  path: "C:/testtemp/post/"

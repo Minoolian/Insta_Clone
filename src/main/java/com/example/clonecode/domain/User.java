@@ -1,13 +1,12 @@
 package com.example.clonecode.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,6 +25,10 @@ public class User{
     private String title;
     private String website;
     private String profileImgUrl;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Post> postList;
 
     @Builder
     public User(String email, String password, String phone, String name, String title, String website, String profileImgUrl) {
