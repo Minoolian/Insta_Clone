@@ -112,7 +112,7 @@ public class UserService implements UserDetailsService {
 
         User user = userRepository.findUserById(profileId);
         userProfileDto.setUser(user);
-        userProfileDto.setPostCount(0);
+        userProfileDto.setPostCount(user.getPostList().size());
 
         User loginUser = userRepository.findUserById(sessionId);
         userProfileDto.setLoginUser(loginUser.getId() == user.getId());
@@ -121,6 +121,10 @@ public class UserService implements UserDetailsService {
 
         userProfileDto.setUserFollowerCount(followRepository.findFollowerCountById(user.getId()));
         userProfileDto.setUserFollowingCount(followRepository.findFollowingCountById(loginUser.getId()));
+
+        user.getPostList().forEach(post->{
+            post.setLikesCount(post.getLikeList().size());
+        });
 
         return userProfileDto;
 

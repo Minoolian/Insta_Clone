@@ -1,11 +1,13 @@
 package com.example.clonecode.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,7 +25,14 @@ public class Post {
     @ManyToOne
     private User user;
 
+    @Transient
+    private long likesCount;
+
     private LocalDateTime createDate;
+
+    @JsonIgnoreProperties({"post"})
+    @OneToMany(mappedBy = "post")
+    private List<Likes> likeList;
 
     // DB insert 시 함께 실행. jpa auditing 고려
     @PrePersist
@@ -40,5 +49,9 @@ public class Post {
     public void update(String tag, String text) {
         this.tag = tag;
         this.text = text;
+    }
+
+    public void setLikesCount(long likesCount) {
+        this.likesCount = likesCount;
     }
 }
