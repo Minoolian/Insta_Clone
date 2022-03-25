@@ -1,5 +1,6 @@
 package com.example.clonecode.service;
 
+import com.example.clonecode.config.UserDetailsImpl;
 import com.example.clonecode.domain.FollowRepository;
 import com.example.clonecode.domain.User;
 import com.example.clonecode.domain.UserRepository;
@@ -9,9 +10,6 @@ import com.example.clonecode.web.dto.UserProfileDto;
 import com.example.clonecode.web.dto.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,18 +22,10 @@ import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(username);
-
-        if(user==null) return null;
-        return new UserDetailsImpl(user);
-    }
 
     public boolean save(UserLoginDto userLoginDto){
         if(userRepository.findUserByEmail(userLoginDto.getEmail()) != null) return false;
@@ -58,7 +48,7 @@ public class UserService implements UserDetailsService {
     private String uploadFolder;
 
     @Transactional
-    public void update(UserUpdateDto userUpdateDto, MultipartFile multipartFile) {
+    public void update(UserUpdateDto userUpdateDto, MultipartFile multipartFile, UserDetailsImpl userDetails) {
         User user = userRepository.findUserById(userUpdateDto.getId());
         BCryptPasswordEncoder encoder=new BCryptPasswordEncoder();
 
@@ -86,6 +76,8 @@ public class UserService implements UserDetailsService {
                 userUpdateDto.getTitle(),
                 userUpdateDto.getWebsite()
         );
+
+        userDetails.updateUser(user);
     }
 
     public UserDto getUserDtoByEmail(String email){

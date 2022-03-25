@@ -1,6 +1,6 @@
 package com.example.clonecode.web.controller;
 
-import com.example.clonecode.service.UserDetailsImpl;
+import com.example.clonecode.config.UserDetailsImpl;
 import com.example.clonecode.service.UserService;
 import com.example.clonecode.web.dto.UserProfileDto;
 import com.example.clonecode.web.dto.UserUpdateDto;
@@ -20,6 +20,9 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping({"/", "user/story"})
+    public String story() { return "user/story"; }
+
     @GetMapping("/user/profile")
     public String profile(@RequestParam long id, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model){
         UserProfileDto userProfileDto = userService.getUserProfileDto(id, userDetails.getUser().getId());
@@ -35,8 +38,9 @@ public class UserController {
     }
 
     @PostMapping("user/update")
-    public String updateUser(UserUpdateDto userUpdateDto, @RequestParam("profileImgUrl") MultipartFile multipartFile, RedirectAttributes redirectAttributes){
-        userService.update(userUpdateDto, multipartFile);
+    public String updateUser(UserUpdateDto userUpdateDto, @RequestParam("profileImgUrl") MultipartFile multipartFile, RedirectAttributes redirectAttributes,
+                             @AuthenticationPrincipal UserDetailsImpl userDetails){
+        userService.update(userUpdateDto, multipartFile, userDetails);
         redirectAttributes.addAttribute("id", userUpdateDto.getId());
         return "redirect:/user/profile";
     }
