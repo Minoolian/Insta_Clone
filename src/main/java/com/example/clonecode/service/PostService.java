@@ -1,5 +1,6 @@
 package com.example.clonecode.service;
 
+import com.example.clonecode.config.UserDetailsImpl;
 import com.example.clonecode.domain.Post;
 import com.example.clonecode.domain.PostRepository;
 import com.example.clonecode.domain.User;
@@ -29,7 +30,7 @@ public class PostService {
     @Value("${post.path}")
     private String uploadUrl;
 
-    public void save(PostUploadDto postUploadDto, long userId, MultipartFile multipartFile) {
+    public void save(PostUploadDto postUploadDto, MultipartFile multipartFile, UserDetailsImpl userDetails) {
         UUID uuid = UUID.randomUUID();
         String imgFileName = uuid + "_" + multipartFile.getOriginalFilename();
 
@@ -40,12 +41,11 @@ public class PostService {
             e.printStackTrace();
         }
 
-        User user = userRepository.findUserById(userId);
         postRepository.save(Post.builder()
                         .postImgUrl(imgFileName)
                         .tag(postUploadDto.getTag())
                         .text(postUploadDto.getText())
-                        .user(user)
+                        .user(userDetails.getUser())
                         .build());
     }
 

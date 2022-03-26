@@ -31,7 +31,7 @@ public class Post {
     private LocalDateTime createDate;
 
     @JsonIgnoreProperties({"post"})
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Likes> likeList;
 
     // DB insert 시 함께 실행. jpa auditing 고려

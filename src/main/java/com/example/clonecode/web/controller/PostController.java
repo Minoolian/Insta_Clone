@@ -1,13 +1,14 @@
 package com.example.clonecode.web.controller;
 
+import com.example.clonecode.config.UserDetailsImpl;
 import com.example.clonecode.service.PostService;
 import com.example.clonecode.service.UserService;
 import com.example.clonecode.web.dto.PostDto;
 import com.example.clonecode.web.dto.PostUpdateDto;
 import com.example.clonecode.web.dto.PostUploadDto;
-import com.example.clonecode.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,40 +26,33 @@ public class PostController {
     private final UserService userService;
 
     @GetMapping("/post/upload")
-    public String upload(Authentication authentication, Model model) {
-        UserDto userDto = userService.getUserDtoByEmail(authentication.getName());
-        model.addAttribute("userDto", userDto);
-        return "post/upload";
-    }
+    public String upload() { return "post/upload"; }
 
     @PostMapping("post")
-    public String uploadPost(PostUploadDto postUploadDto, @RequestParam("uploadImgUrl") MultipartFile multipartFile, RedirectAttributes redirectAttributes, Authentication authentication) {
-        long id = userService.getUserIdByEmail(authentication.getName());
-        postService.save(postUploadDto, id, multipartFile);
-        redirectAttributes.addAttribute("id", id);
+    public String uploadPost(PostUploadDto postUploadDto, @RequestParam("uploadImgUrl") MultipartFile multipartFile, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.save(postUploadDto, multipartFile, userDetails);
+        redirectAttributes.addAttribute("id", userDetails.getUser().getId());
         return "redirect:/user/profile";
     }
 
     @GetMapping("/post/update/{postId}")
-    public String update(@PathVariable long postId, Model model, Authentication authentication) {
+    public String update(@PathVariable long postId, Model model) {
         PostDto postDto = postService.getPostDto(postId);
         model.addAttribute("postDto", postDto);
         return "post/update";
     }
 
     @PostMapping("/post/update")
-    public String postUpdate(PostUpdateDto postUpdateDto, Authentication authentication, RedirectAttributes redirectAttributes) {
-        long id = userService.getUserIdByEmail(authentication.getName());
+    public String postUpdate(PostUpdateDto postUpdateDto, @AuthenticationPrincipal UserDetailsImpl userDetails, RedirectAttributes redirectAttributes) {
         postService.update(postUpdateDto);
-        redirectAttributes.addAttribute("id", id);
+        redirectAttributes.addAttribute("id", userDetails.getUser().getId());
         return "redirect:/user/profile";
     }
 
     @PostMapping("/post/delete")
-    public String delete(@RequestParam("postId") long postId, Authentication authentication, RedirectAttributes redirectAttributes) {
-        long id = userService.getUserIdByEmail(authentication.getName());
+    public String delete(@RequestParam("postId") long postId, @AuthenticationPrincipal UserDetailsImpl userDetails, RedirectAttributes redirectAttributes) {
         postService.delete(postId);
-        redirectAttributes.addAttribute("id", id);
+        redirectAttributes.addAttribute("id", userDetails.getUser().getId());
         return "redirect:/user/profile";
     }
 }

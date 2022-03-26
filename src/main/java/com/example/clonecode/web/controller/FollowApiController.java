@@ -1,11 +1,15 @@
 package com.example.clonecode.web.controller;
 
+import com.example.clonecode.config.UserDetailsImpl;
 import com.example.clonecode.domain.Follow;
 import com.example.clonecode.domain.FollowRepository;
 import com.example.clonecode.service.FollowService;
 import com.example.clonecode.web.dto.FollowDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,26 +20,26 @@ import java.util.List;
 public class FollowApiController {
 
     private final FollowService followService;
-    private final FollowRepository followRepository;
 
     @PostMapping("/follow/{toUserId}")
-    public Follow followUser(@PathVariable long toUserId, Authentication authentication){
-        return followService.save(authentication.getName(), toUserId);
+    public ResponseEntity<?> followUser(@PathVariable long toUserId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        followService.follow(userDetails.getUser().getId(), toUserId);
+        return new ResponseEntity<>("팔로우 성공", HttpStatus.OK);
     }
 
     @DeleteMapping("/follow/{toUserId}")
-    public void unFollowUser(@PathVariable long toUserId, Authentication authentication){
-        Long id = followService.getFollowIdByFromEmailToId(authentication.getName(), toUserId);
-        followRepository.deleteById(id);
+    public ResponseEntity<?> unFollowUser(@PathVariable long toUserId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        followService.unFollow(userDetails.getUser().getId(), toUserId);
+        return new ResponseEntity<>("언팔 성공", HttpStatus.OK)
     }
 
     @GetMapping("/follow/{profileId}/follower")
-    public List<FollowDto> getFollower(@PathVariable long profileId, Authentication authentication){
-        return followService.getFollowDtoListByProfileIdAboutFollower(profileId, authentication.getName());
+    public List<FollowDto> getFollower(@PathVariable long profileId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return followService.getFollower(profileId, userDetails.getUser().getId());
     }
 
     @GetMapping("/follow/{profileId}/following")
-    public List<FollowDto> getFollowing(@PathVariable long profileId, Authentication authentication){
-        return followService.getFollowDtoListByProfileIdAboutFollowing(profileId, authentication.getName());
+    public List<FollowDto> getFollowing(@PathVariable long profileId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return followService.getFollowing(profileId, userDetails.getUser().getId());
     }
 }
