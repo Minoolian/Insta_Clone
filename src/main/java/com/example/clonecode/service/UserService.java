@@ -109,10 +109,10 @@ public class UserService {
         User loginUser = userRepository.findUserById(sessionId);
         userProfileDto.setLoginUser(loginUser.getId() == user.getId());
 
-        userProfileDto.setFollow(followRepository.findFollowByFromUserAndToUser(loginUser, user) != null);
+        userProfileDto.setFollow(followRepository.findFollowByFromUserIdAndToUserId(sessionId, profileId) != null);
 
-        userProfileDto.setUserFollowerCount(followRepository.findFollowerCountById(user.getId()));
-        userProfileDto.setUserFollowingCount(followRepository.findFollowingCountById(loginUser.getId()));
+        userProfileDto.setUserFollowerCount(followRepository.findFollowerCountById(profileId));
+        userProfileDto.setUserFollowingCount(followRepository.findFollowingCountById(profileId));
 
         user.getPostList().forEach(post->{
             post.setLikesCount(post.getLikeList().size());

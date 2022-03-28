@@ -1,14 +1,11 @@
 package com.example.clonecode.web.controller;
 
 import com.example.clonecode.config.UserDetailsImpl;
-import com.example.clonecode.domain.Follow;
-import com.example.clonecode.domain.FollowRepository;
 import com.example.clonecode.service.FollowService;
 import com.example.clonecode.web.dto.FollowDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +27,7 @@ public class FollowApiController {
     @DeleteMapping("/follow/{toUserId}")
     public ResponseEntity<?> unFollowUser(@PathVariable long toUserId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         followService.unFollow(userDetails.getUser().getId(), toUserId);
-        return new ResponseEntity<>("언팔 성공", HttpStatus.OK)
+        return new ResponseEntity<>("언팔 성공", HttpStatus.OK);
     }
 
     @GetMapping("/follow/{profileId}/follower")
