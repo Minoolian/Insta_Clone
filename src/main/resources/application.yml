@@ -21,8 +21,20 @@ spring:
       enabled: true
       max-file-size: "2MB"
 
+# 파일설정
 profileImg:
   path: "C:/testtemp/"
 
 post:
   path: "C:/testtemp/post/"
+  
+# 인코딩 설정
+#server:
+#  servlet:
+#    encoding:
+#      charset: UTF-8
+#      enabled: true
+#      force: true
+
+
+
