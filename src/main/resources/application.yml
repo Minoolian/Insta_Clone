@@ -23,7 +23,7 @@ spring:
 
 # 파일설정
 profileImg:
-  path: "C:/testtemp/"
+  path: "C:/testtemp/profile/"
 
 post:
   path: "C:/testtemp/post/"

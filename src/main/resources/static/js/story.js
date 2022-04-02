@@ -3,7 +3,7 @@ let page = 0;
 
 function storyLoad() {
     $.ajax({
-        url: `/api/post?page=${page}`,
+        url: `/api/post/story?page=${page}`,
         dataType: "json"
     }).done(res => {
         res.content.forEach((post) => {

@@ -20,4 +20,8 @@ public class PostInfoDto {
     private LocalDateTime createdate;
     private User postUploader;
     private String postImgUrl;
+
+    private long likesCount;
+    private boolean likeState;
+    private boolean uploader;
 }

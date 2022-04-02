@@ -38,7 +38,7 @@ public class UserService {
                 .name(userLoginDto.getName())
                 .title(null)
                 .website(null)
-                .profileImgUrl("/img/default_profile.jpg")
+                .profileImgUrl("default_profile.jpg")
                 .build());
 
         return true;
@@ -115,7 +115,7 @@ public class UserService {
         userProfileDto.setUserFollowingCount(followRepository.findFollowingCountById(profileId));
 
         user.getPostList().forEach(post->{
-            post.setLikesCount(post.getLikeList().size());
+            post.setLikesCount(post.getLikesList().size());
         });
 
         return userProfileDto;

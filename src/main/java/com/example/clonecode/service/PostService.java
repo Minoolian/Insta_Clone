@@ -11,9 +11,12 @@ import com.example.clonecode.web.dto.PostUpdateDto;
 import com.example.clonecode.web.dto.PostUploadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -54,7 +57,7 @@ public class PostService {
         post.update(postUpdateDto.getTag(), postUpdateDto.getText());
     }
 
-    public PostInfoDto getPostInfoDto(long postId, String email){
+    public PostInfoDto getPostInfoDto(long postId, long sessionId){
         PostInfoDto postInfoDto = new PostInfoDto();
         postInfoDto.setId(postId);
 
@@ -64,8 +67,15 @@ public class PostService {
         postInfoDto.setPostImgUrl(post.getPostImgUrl());
         postInfoDto.setCreatedate(post.getCreateDate());
 
-        User user = userRepository.findUserByEmail(email);
+        postInfoDto.setLikesCount(post.getLikesList().size());
+        post.getLikesList().forEach(likes->{
+            if(likes.getUser().getId() == sessionId) postInfoDto.setLikeState(true);
+        });
+
+        User user = userRepository.findById(post.getUser().getId()).get();
+
         postInfoDto.setPostUploader(user);
+        if(sessionId == post.getUser().getId()) postInfoDto.setUploader(true);
 
         return postInfoDto;
     }
@@ -89,5 +99,19 @@ public class PostService {
         file.delete();
 
         postRepository.deleteById(postId);
+    }
+
+    @Transactional
+    public Page<Post> mainStory(long sessionId, Pageable pageable) {
+        Page<Post> postList = postRepository.mainStory(sessionId, pageable);
+
+        postList.forEach(post -> {
+            post.setLikesCount(post.getLikesList().size());
+            post.getLikesList().forEach(likes -> {
+                if(likes.getUser().getId() == sessionId) post.updateLikesState(true);
+            });
+        });
+
+        return postList;
     }
 }

@@ -1,8 +1,6 @@
 package com.example.clonecode.service;
 
 import com.example.clonecode.domain.LikesRepository;
-import com.example.clonecode.domain.User;
-import com.example.clonecode.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +11,14 @@ import javax.transaction.Transactional;
 public class LikesService {
 
     private final LikesRepository likesRepository;
-    private final UserRepository userRepository;
 
     @Transactional
-    public void likes(long postId, String loginEmail){
-        User user = userRepository.findUserByEmail(loginEmail);
-        likesRepository.likes(postId, user.getId());
+    public void likes(long postId, long sessionId){
+        likesRepository.likes(postId, sessionId);
     }
 
     @Transactional
-    public void unLikes(long postId, String loginEmail){
-        User user = userRepository.findUserByEmail(loginEmail);
-        likesRepository.unLikes(postId, user.getId());
+    public void unLikes(long postId, long sessionId){
+        likesRepository.unLikes(postId, sessionId);
     }
 }
