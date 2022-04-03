@@ -33,15 +33,20 @@ public class PostService {
     @Value("${post.path}")
     private String uploadUrl;
 
+    @Transactional
     public void save(PostUploadDto postUploadDto, MultipartFile multipartFile, UserDetailsImpl userDetails) {
         UUID uuid = UUID.randomUUID();
         String imgFileName = uuid + "_" + multipartFile.getOriginalFilename();
 
         Path imageFilePath = Paths.get(uploadUrl + imgFileName);
-        try {
-            Files.write(imageFilePath, multipartFile.getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
+           if(multipartFile.getSize()!=0) {
+            try {
+                Files.write(imageFilePath, multipartFile.getBytes());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
+            imgFileName = "default_post_img.jpg";
         }
 
         postRepository.save(Post.builder()
@@ -52,11 +57,13 @@ public class PostService {
                         .build());
     }
 
+    @Transactional
     public void update(PostUpdateDto postUpdateDto) {
         Post post = postRepository.findPostById(postUpdateDto.getId());
         post.update(postUpdateDto.getTag(), postUpdateDto.getText());
     }
 
+    @Transactional
     public PostInfoDto getPostInfoDto(long postId, long sessionId){
         PostInfoDto postInfoDto = new PostInfoDto();
         postInfoDto.setId(postId);
@@ -71,15 +78,18 @@ public class PostService {
         post.getLikesList().forEach(likes->{
             if(likes.getUser().getId() == sessionId) postInfoDto.setLikeState(true);
         });
+        postInfoDto.setCommentList(post.getCommentList());
 
         User user = userRepository.findById(post.getUser().getId()).get();
 
         postInfoDto.setPostUploader(user);
         if(sessionId == post.getUser().getId()) postInfoDto.setUploader(true);
+        else postInfoDto.setUploader(false);
 
         return postInfoDto;
     }
 
+    @Transactional
     public PostDto getPostDto(long postId) {
         Post post = postRepository.findById(postId).get();
 
@@ -92,6 +102,7 @@ public class PostService {
 
     }
 
+    @Transactional
     public void delete(long postId) {
         Post post = postRepository.findPostById(postId);
 

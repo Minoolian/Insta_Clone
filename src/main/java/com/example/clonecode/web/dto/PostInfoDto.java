@@ -1,5 +1,6 @@
 package com.example.clonecode.web.dto;
 
+import com.example.clonecode.domain.Comment;
 import com.example.clonecode.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -24,4 +26,5 @@ public class PostInfoDto {
     private long likesCount;
     private boolean likeState;
     private boolean uploader;
+    private List<Comment> commentList;
 }

@@ -1,6 +1,6 @@
 package com.example.clonecode.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,7 @@ public class User{
     private String profileImgUrl;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonIgnoreProperties({"user"})
     private List<Post> postList;
 
     @Builder

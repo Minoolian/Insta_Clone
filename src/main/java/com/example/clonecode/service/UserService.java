@@ -27,6 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
+    @Transactional
     public boolean save(UserLoginDto userLoginDto){
         if(userRepository.findUserByEmail(userLoginDto.getEmail()) != null) return false;
 

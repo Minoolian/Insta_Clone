@@ -22,7 +22,9 @@ public class Post {
     private String tag;
     private String text;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id")
+    @JsonIgnoreProperties({"postList"})
     private User user;
 
     @Transient
@@ -36,6 +38,11 @@ public class Post {
     @JsonIgnoreProperties({"post"})
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Likes> likesList;
+
+    @OrderBy("id")
+    @JsonIgnoreProperties({"post"})
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> commentList;
 
     // DB insert 시 함께 실행. jpa auditing 고려
     @PrePersist
