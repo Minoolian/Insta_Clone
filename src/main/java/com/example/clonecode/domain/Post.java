@@ -22,9 +22,9 @@ public class Post {
     private String tag;
     private String text;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
     @JsonIgnoreProperties({"postList"})
+    @JoinColumn(name="user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     @Transient

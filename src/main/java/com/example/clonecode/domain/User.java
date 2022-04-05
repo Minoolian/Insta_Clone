@@ -2,14 +2,14 @@ package com.example.clonecode.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 //@Table(name="user")
 public class User{
@@ -26,7 +26,7 @@ public class User{
     private String website;
     private String profileImgUrl;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties({"user"})
     private List<Post> postList;
 
@@ -48,4 +48,6 @@ public class User{
         this.title=title;
         this.website=website;
     }
+
+    public void updateProfileImgUrl(String profileImgUrl){ this.profileImgUrl = profileImgUrl; }
 }

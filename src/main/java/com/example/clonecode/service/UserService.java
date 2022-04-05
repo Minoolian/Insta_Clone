@@ -67,7 +67,7 @@ public class UserService {
                 e.printStackTrace();
             }
 
-            user.setProfileImgUrl(imageFileName);
+            user.updateProfileImgUrl(imageFileName);
         }
 
         user.update(

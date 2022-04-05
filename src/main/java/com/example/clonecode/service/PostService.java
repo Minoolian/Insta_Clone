@@ -54,6 +54,7 @@ public class PostService {
                         .tag(postUploadDto.getTag())
                         .text(postUploadDto.getText())
                         .user(userDetails.getUser())
+                        .likesCount(0)
                         .build());
     }
 
@@ -83,8 +84,7 @@ public class PostService {
         User user = userRepository.findById(post.getUser().getId()).get();
 
         postInfoDto.setPostUploader(user);
-        if(sessionId == post.getUser().getId()) postInfoDto.setUploader(true);
-        else postInfoDto.setUploader(false);
+        postInfoDto.setUploader(sessionId == post.getUser().getId());
 
         return postInfoDto;
     }
@@ -94,7 +94,7 @@ public class PostService {
         Post post = postRepository.findById(postId).get();
 
         return PostDto.builder()
-                .id(post.getId())
+                .id(postId)
                 .text(post.getText())
                 .postImgUrl(post.getPostImgUrl())
                 .tag(post.getTag())

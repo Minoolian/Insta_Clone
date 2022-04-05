@@ -2,11 +2,13 @@ package com.example.clonecode.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class PostUploadDto {
 
 //    private long id;

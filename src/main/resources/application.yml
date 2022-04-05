@@ -11,9 +11,9 @@ spring:
       show-sql: true
       use-sql-comment: true
       ddl-auto: update
-    open-in-view: false
     show-sql: true
     generate-ddl: true
+    open-in-view: true
 
   # multipart 설정
   servlet:

@@ -20,8 +20,8 @@ public class Likes {
     @ManyToOne
     private Post post;
 
-    @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"postList"})
+    @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
 

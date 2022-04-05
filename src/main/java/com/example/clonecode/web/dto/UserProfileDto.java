@@ -1,15 +1,11 @@
 package com.example.clonecode.web.dto;
 
 import com.example.clonecode.domain.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class UserProfileDto {
 
     private boolean loginUser;
