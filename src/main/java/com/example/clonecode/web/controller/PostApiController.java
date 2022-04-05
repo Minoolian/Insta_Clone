@@ -39,4 +39,9 @@ public class PostApiController {
     public Page<Post> mainStory(@AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(size=3) Pageable pageable){
         return postService.mainStory(userDetails.getUser().getId(), pageable);
     }
+
+    @GetMapping("/post/search")
+    public Page<Post> searchTag(@RequestParam String tag, @AuthenticationPrincipal UserDetailsImpl userDetails, @PageableDefault(size = 3) Pageable pageable) {
+        return postService.searchResult(tag, userDetails.getUser().getId(), pageable);
+    }
 }

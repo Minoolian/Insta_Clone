@@ -125,4 +125,18 @@ public class PostService {
 
         return postList;
     }
+
+    @Transactional
+    public Page<Post> searchResult(String tag, long sessionId, Pageable pageable) {
+        Page<Post> postList = postRepository.searchResult(tag, pageable);
+
+        postList.forEach(post -> {
+            post.setLikesCount(post.getLikesList().size());
+            post.getLikesList().forEach(likes -> {
+                post.updateLikesState(likes.getUser().getId() == sessionId);
+            });
+        });
+
+        return postList;
+    }
 }

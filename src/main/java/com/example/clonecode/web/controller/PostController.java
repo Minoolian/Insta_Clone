@@ -7,7 +7,6 @@ import com.example.clonecode.web.dto.PostDto;
 import com.example.clonecode.web.dto.PostUpdateDto;
 import com.example.clonecode.web.dto.PostUploadDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +25,9 @@ public class PostController {
     private final UserService userService;
 
     @GetMapping("/post/upload")
-    public String upload() { return "post/upload"; }
+    public String upload() {
+        return "post/upload";
+    }
 
     @PostMapping("post")
     public String uploadPost(PostUploadDto postUploadDto, @RequestParam("uploadImgUrl") MultipartFile multipartFile, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -54,5 +55,17 @@ public class PostController {
         postService.delete(postId);
         redirectAttributes.addAttribute("id", userDetails.getUser().getId());
         return "redirect:/user/profile";
+    }
+
+    @GetMapping("/post/search")
+    public String search(@RequestParam("tag") String tag, Model model) {
+        model.addAttribute("tag", tag);
+        return "post/search";
+    }
+
+    @PostMapping("/post/searchForm")
+    public String searchForm(String tag, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAttribute("tag", tag);
+        return "redirect:/post/search";
     }
 }
