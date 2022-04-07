@@ -68,4 +68,11 @@ public class PostController {
         redirectAttributes.addAttribute("tag", tag);
         return "redirect:/post/search";
     }
+
+    @GetMapping("/post/likes")
+    public String likes() { return "post/likes"; }
+
+    @GetMapping("/post/popular")
+    public String popular() { return "post/popular"; }
+
 }
