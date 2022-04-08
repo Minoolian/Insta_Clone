@@ -21,6 +21,15 @@ spring:
       enabled: true
       max-file-size: "2MB"
 
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: 662591148139810
+            client-secret: 4e37a5ead0016c696c92d5c728c8cf38
+            scope: public_profile, email
+
 # 파일설정
 profileImg:
   path: "C:/testtemp/profile/"
@@ -35,6 +44,7 @@ post:
 #      charset: UTF-8
 #      enabled: true
 #      force: true
+
 
 
 

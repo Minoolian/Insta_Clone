@@ -15,11 +15,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PrincipalDetailsService principalDetailsService;
 
+    private final Oauth2DetailsService oauth2DetailsService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/", "/login", "/signup", "/style/**", "/js/**", "/img/**").permitAll()
+                .antMatchers("/","/login", "/signup", "/style/**", "/js/**", "/img/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
@@ -29,7 +31,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .logout()
                 .logoutSuccessUrl("/login")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+            .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .userInfoEndpoint()
+                .userService(oauth2DetailsService);
 
     }
 

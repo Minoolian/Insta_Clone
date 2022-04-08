@@ -20,9 +20,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping({"/", "user/story"})
-    public String story() { return "user/story"; }
-
     @GetMapping("/user/profile")
     public String profile(@RequestParam long id, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model){
         UserProfileDto userProfileDto = userService.getUserProfileDto(id, userDetails.getUser().getId());
