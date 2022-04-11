@@ -31,12 +31,12 @@ public class FollowApiController {
     }
 
     @GetMapping("/follow/{profileId}/follower")
-    public List<FollowDto> getFollower(@PathVariable long profileId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return followService.getFollower(profileId, userDetails.getUser().getId());
+    public ResponseEntity<List<FollowDto>> getFollower(@PathVariable long profileId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return new ResponseEntity<>(followService.getFollower(profileId, userDetails.getUser().getId()), HttpStatus.OK);
     }
 
     @GetMapping("/follow/{profileId}/following")
-    public List<FollowDto> getFollowing(@PathVariable long profileId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return followService.getFollowing(profileId, userDetails.getUser().getId());
+    public ResponseEntity<List<FollowDto>> getFollowing(@PathVariable long profileId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return new ResponseEntity<>(followService.getFollowing(profileId, userDetails.getUser().getId()), HttpStatus.OK);
     }
 }

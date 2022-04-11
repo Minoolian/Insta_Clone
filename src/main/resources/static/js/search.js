@@ -3,7 +3,7 @@ let page = 0;
 
 function storyLoad() {
     $.ajax({
-        url: `/api/post/search?tag=${tag}&page=${page}`,
+        url: `/api/post/tag?tag=${tag}&page=${page}`,
         dataType: "json"
     }).done(res => {
         if(res.totalElements == 0) {
