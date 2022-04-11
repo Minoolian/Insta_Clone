@@ -4,7 +4,7 @@ import com.example.clonecode.config.UserDetailsImpl;
 import com.example.clonecode.domain.FollowRepository;
 import com.example.clonecode.domain.User;
 import com.example.clonecode.domain.UserRepository;
-import com.example.clonecode.web.dto.UserDto;
+import com.example.clonecode.handler.CustomValidationException;
 import com.example.clonecode.web.dto.UserLoginDto;
 import com.example.clonecode.web.dto.UserProfileDto;
 import com.example.clonecode.web.dto.UserUpdateDto;
@@ -29,7 +29,7 @@ public class UserService {
 
     @Transactional
     public boolean save(UserLoginDto userLoginDto){
-        if(userRepository.findUserByEmail(userLoginDto.getEmail()) != null) return false;
+        if(userRepository.findUserByEmail(userLoginDto.getEmail()) != null) throw new CustomValidationException("이미 존재하는 이메일입니다.");
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userRepository.save(User.builder()
@@ -79,23 +79,6 @@ public class UserService {
         );
 
         userDetails.updateUser(user);
-    }
-
-    public UserDto getUserDtoByEmail(String email){
-        User user = userRepository.findUserByEmail(email);
-        return UserDto.builder()
-                .email(user.getEmail())
-                .name(user.getName())
-                .phone(user.getPhone())
-                .title(user.getTitle())
-                .id(user.getId())
-                .profileImgUrl(user.getProfileImgUrl())
-                .website(user.getWebsite())
-                .build();
-    }
-
-    public Long getUserIdByEmail(String email) {
-        return userRepository.findUserByEmail(email).getId();
     }
 
     @Transactional

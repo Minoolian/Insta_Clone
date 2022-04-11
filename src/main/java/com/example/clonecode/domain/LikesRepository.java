@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface LikesRepository extends JpaRepository<Likes, Long> {
-    Likes findLikesByPostAndUser(Post post, User user);
 
     @Modifying
     @Query(value = " INSERT INTO likes(post_id, user_id) VALUES(:postId, :userId)", nativeQuery = true)
