@@ -1,19 +1,22 @@
 package com.example.clonecode.domain;
 
-import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+// 정의해놓은 실제 DB 사용
 class UserRepositoryTest {
 
     @Autowired
@@ -28,7 +31,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    public void save(){
+    public void save_success(){
         userRepository.save(user);
 
         User email = userRepository.findUserByEmail("test@test");
